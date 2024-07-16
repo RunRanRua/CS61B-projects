@@ -3,9 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/CS61B-projects.iml" filepath="$PROJECT_DIR$/.idea/CS61B-projects.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lab5_DisjointSet/lab5_DisjointSet.iml" filepath="$PROJECT_DIR$/lab5_DisjointSet/lab5_DisjointSet.iml" />
       <module fileurl="file://$PROJECT_DIR$/proj0/proj0.iml" filepath="$PROJECT_DIR$/proj0/proj0.iml" />
       <module fileurl="file://$PROJECT_DIR$/proj1a/proj1a.iml" filepath="$PROJECT_DIR$/proj1a/proj1a.iml" />
       <module fileurl="file://$PROJECT_DIR$/proj1b/proj1b.iml" filepath="$PROJECT_DIR$/proj1b/proj1b.iml" />
+      <module fileurl="file://$PROJECT_DIR$/proj1c/proj1c.iml" filepath="$PROJECT_DIR$/proj1c/proj1c.iml" />
     </modules>
   </component>
 </project>
