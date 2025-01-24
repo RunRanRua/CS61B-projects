@@ -456,11 +456,142 @@ public class AList {
 }
 ```
 
-## 06 
+## 06 Comparator
 
+> We want to compare elements for all types of variables
 
+### 1- first approach
 
+```java
+public interface OurComparable {
+   /** Return negative num if this < o.
+    *  Return 0 if this equals o.
+    *  Return positive num if this > o.
+    */
+   public int compareTo(Object o);
+}
 
+public class Dog implements OurComparable {
+    private String name;
+    private int size;
+   
+    public int compareTo(Object o){
+        Dog uddaDog = (Dog) o; // convert o into Dog class
+        return this.size - uddaDog.size;
+}
 
+public class Maximizer {
+    public static OurComparable max(OurComparable[] items){
+        int maxDex = 0;	// max element
+        for (int i=0; i<items.length; i++){
+            int cmp = items[i].compareTo(items[maxDex]); // compare i-element to max-element in using compareTo()
+            if (cmp >0){
+                maxDex = i;
+            }
+        }
+        return items[maxDex]
+    }
+    
+    
+    
+    public static void main(String[] args){
+        Dog[] dogs = {...};
+        Dog maxDog = (Dog) Maximizer.max(dogs);
+    }
+}
+```
 
+### 2- built-in approach : Comparable
+
+> The previous approach has some limits such as : primary variables/classess have no implement OurComparable
+
+```java
+public class Dog implements Comparable<Dog> {
+    private String name;
+    private int size;
+   
+    public int compareTo(Dog uddaDog){
+        return this.size - uddaDog.size;
+}
+    
+public class Maximizer {
+    public static Comparable max(Comparable[] items){
+        int maxDex = 0;	// max element
+        for (int i=0; i<items.length; i++){
+            int cmp = items[i].compareTo(items[maxDex]); // compare i-element to max-element in using compareTo()
+            if (cmp >0){
+                maxDex = i;
+            }
+        }
+        return items[maxDex]
+    }
+}
+```
+
+### 3- comparator : customized comparison
+
+```java
+import java.util.Comparator;
+
+public class Dog implements Comparable<Dog> {
+    private String name;
+    private int size;
+
+    public int compareTo(Dog uddaDog) {
+        return this.size - uddaDog.size;
+    }
+
+    // customized comparator : by name
+    public static class NameComparator implement Comparable<Dog>{
+        // func to compare
+        public int compare(Dog a, Dog b){
+            return a.name.compareTo(b.name);
+        }
+    }
+    
+    
+    public static void main(String[] args){
+        Dog[] dogs = new Dogs[]{...}
+        
+        Dog.NameComparator nc = new Dog.NameComparator(); // instantialize comparator
+        if ( nc.compare(d1, d3) > 0){
+            print("d1");
+        }
+    }
+}
+```
+
+### 4- comparator : user-friendly version
+
+```java
+import java.util.Comparator;
+
+public class Dog implements Comparable<Dog> {
+    private String name;
+    private int size;
+    public int compareTo(Dog uddaDog) {...}
+
+    // customized comparator   [helper class]
+    private static class NameComparator implement Comparable<Dog>{
+        // func to compare
+        public int compare(Dog a, Dog b){
+            return a.name.compareTo(b.name);
+        }
+    }
+    // customized comparator  [public]
+    public static class Comparator<Dog> getNameComparator(){
+        return new NameComparator();
+    }
+    
+    
+    public static void main(String[] args){
+        Dog[] dogs = new Dogs[]{...}
+        
+        Comparator<Dog> nc = Dog.getNameComparator(); // Dog.NameComparator nc = new Dog.NameComparator()
+        if ( nc.compare(d1, d3) > 0){
+            print("d1");
+        }
+    }
+}
+```
 
