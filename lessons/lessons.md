@@ -595,3 +595,110 @@ public class Dog implements Comparable<Dog> {
 }
 ```
 
+## 07 ArraySet + Iterator + toString
+
+> Construct an arrayset with iterator (iterator class + hasNext() + next() + implements)
+
+### 1- ugly version of iterator
+
+> we make our own iterator
+
+```java
+public class ArraySet<T> implements Iterable<T> {
+    private T[] items;
+    private int size;
+    
+    // helper
+    private class ArraySetIterator implements Iterator<T>{
+        private int pos;
+        // constructor
+        public ArraySetIterator() {
+            pos = 0;
+        }
+        public boolean hasNext(){
+            return pos < size;
+        }
+        public T next(){
+            T returnItem = items[pos];
+            pos++;
+            return returnItem;
+        }
+    }
+    // iterator : public
+    public Iterator<T> iterator() {
+    	return new ArraySetIterator;
+    }
+
+    
+    public static void main(String[] args) {
+        ArraySet<Integer> aset = new ArraySet<>();
+        aset.add(5);
+
+        Iterator<Integer> aseer = aset.iterator();
+
+        while (aseer.hasNext()) {
+            int i = asser.next();
+            System.out.println(i);
+        }
+   }
+}
+
+```
+
+### 2- ToString()
+
+```java
+public class ArraySet<T> implements Iterable<T> {
+   @Override
+   public String toString() {
+       /*
+       String returnString = "{";
+       for (T item : this) {
+           returnString += item.toString();
+           returnString += ", ";
+       }
+       returnString += "}";
+       return returnString;
+       */
+       
+       // better approach : using StringBuilder
+       StringBuilder returnSB = new StringBuilder("{");
+       for (int i=0; i<size; i++){
+           returnSB.append(items[i]).append(', ');
+       }
+       returnSB.append("}");
+       return returnSB.toString();
+   }
+}
+```
+
+### 3- Equal()
+
+```java
+public class ArraySet<T> implements Iterable<T> {
+   @Override
+   public boolean equals(Object o) {
+       if (o instanceof ArraySet oas) {
+           // check sets are of the same size
+           if (oas.size != this.size) {
+               return false;
+           }
+
+           // check that all of MY items are in the other array set
+           for (T x : this) {
+               if (!oas.contains(x)) {
+                   return false;
+               }
+           }
+
+           return true;
+       }
+       // o is not an arrayset, so return false
+       return false;
+
+
+   }
+}
+
+```
+
