@@ -702,3 +702,102 @@ public class ArraySet<T> implements Iterable<T> {
 
 ```
 
+## 08 Disjoint Sets
+
+> intuitive version : ArrayList< Set<Integer> >    = bad for search + hard to implement
+
+### 1- QuickFindDS
+
+> QuickFind optimize the runtime of `isConnected()`
+
+```java
+public interface DisjointSets {
+	void connect(int p, int q); 
+	boolean isConnected(int p, int q);
+}
+
+public class QuickFindDS implements DisjointSets {
+	private int[] id;	// id to differentiate each connected set
+     
+    public QuickFindDS(int N) {
+     	id = new int[N];
+        for (int i = 0; i < N; i++)
+            id[i] = -1;	// init id
+     }         
+
+    
+	public boolean isConnected(int p, int q) {
+        return id[p] == id[q];
+	}
+	public void connect(int p, int q) {
+        int pid = id[p];
+        int qid = id[q];
+       	for (int i = 0; i < id.length; i++) {
+            if (id[i] == pid) {
+                id[i] = qid;
+            }
+        }
+    }
+}
+```
+
+![](.\images\QuickFind.png)
+
+### 2- QuickUnionDS
+
+> QuickUnion optimize the runtime of `connected()`
+
+```java
+public class QuickFindDS implements DisjointSets {
+    private int[] parent;	// id -> (tree) indice =element|value = parent node
+    public boolean isConnected(int p, int q) {...}
+    
+    
+    public QuickFindDS(int N) {
+        parent = new int[N];
+        for (int i = 0; i < N; i++) {  parent[i] = -1; }
+    }         
+    // helper
+	private int find(int p){
+        int r = p;
+        while (parent[r] >=0){ r= parent[r]; }  // climb the tree
+        return r;
+    }
+    public void connect(int p, int q) {
+        int i =find(p);		// find the parent of p set
+        int j =find(q);		// find the parent of q set
+        parent[i] = j;		// connect the 2 parents
+    }
+}
+```
+
+![](.\images\QuickUnion.png)
+
+### 3- Weighted QuickUnion
+
+> Modify quick-union to avoid tall trees. 
+>
+> Track tree size (**number** of elements).
+>
+> New rule: Always link root of **smaller** tree **to** **larger** tree.
+
+```python
+# 2 approaches possibles
+1. replace -1 by -weight for root (Top approach)
+2. create a separate size array   (bottom approach)
+
+# why w instead of h ?
+- same resultat but more complicated to implement
+```
+
+### 4- Weighted QuickUnion With Path Compression
+
+> Reduce hight
+
+```python
+/*
+When we connect A and B, we replace each traveled node's parent by the root 
+*/
+```
+
+![](.\images\ComplexityDS.png)
