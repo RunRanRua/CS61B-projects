@@ -801,3 +801,87 @@ When we connect A and B, we replace each traveled node's parent by the root
 ```
 
 ![](.\images\ComplexityDS.png)
+
+## 09 Binary Trees
+
+> an unordered linked list set : perform insert/remove
+>
+> **problem** : hard to search
+
+```mermaid
+graph TD
+A(1) --> B(2)
+A --> C(3)
+B--> D(4)
+B-->E(5)
+
+```
+
+### 1- BST
+
+> ordered linked list set : improve search capacity
+>
+> For every node X in the tree:
+>
+> - Every key in the **left** subtree is **less** than X’s key.
+> - Every key in the **right** subtree is **greater** than X’s key.
+>
+> **problem** : insertion may cause spindly tree (↘) = brut search  [`logN -> N`]
+
+```mermaid
+graph TD
+A(5) --> B(3)
+A --> C(6)
+B--> D(2)
+B-->E(4)
+```
+
+### 2- AVL
+
+> ordered linked list set : but rotate nodes to ensure height
+>
+> - The difference between L-subtree and R-subtree's height <=1
+>
+> **problem** : when we insert too much, the tree will need too many inter-insertion to adjust tree's structure
+
+### 3- Red-Black Trees
+
+> - Nodes are red or black
+> - root is black
+> - leaves are black
+> - NO two consecutive red nodes
+> - All paths from any node to each of its leaves contain the same number of black nodes
+>
+> **problem** : with insertion, these kind of trees will still augment heights => slow 
+
+## 10- N-Trees
+
+> Instead of binary tree, try N-nary tree
+>
+> - each nodes has at most n child
+> - all nodes (except root) have at least N/2 child
+> - root itself not being leaf, has at least 2 child
+> - all leaves are at the same depth
+>
+> ![](.\images\B-trees.png)
+>
+> - n : nb of items in this node
+> - p : pointer point at subtree
+> - k : item
+
+### 1- B-trees
+
+> good for a large items
+>
+> problem: when N is small, it suffer from performance problem :
+>
+> - maintaining different node types
+> - interconversion between 2-nodes and 3-nodes
+> - walking up the tree to split
+
+![](.\images\B-trees2.png)
+
+```
+
+```
+
