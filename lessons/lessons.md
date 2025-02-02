@@ -844,17 +844,7 @@ B-->E(4)
 >
 > **problem** : when we insert too much, the tree will need too many inter-insertion to adjust tree's structure
 
-### 3- Red-Black Trees
-
-> - Nodes are red or black
-> - root is black
-> - leaves are black
-> - NO two consecutive red nodes
-> - All paths from any node to each of its leaves contain the same number of black nodes
->
-> **problem** : with insertion, these kind of trees will still augment heights => slow 
-
-## 10- N-Trees
+### 3- N-tree
 
 > Instead of binary tree, try N-nary tree
 >
@@ -869,7 +859,7 @@ B-->E(4)
 > - p : pointer point at subtree
 > - k : item
 
-### 1- B-trees
+### 4-  B-trees (2-3 tree)
 
 > good for a large items
 >
@@ -881,7 +871,86 @@ B-->E(4)
 
 ![](.\images\B-trees2.png)
 
-```
+### 5- LLRB tree
 
-```
+> - No node has two red links [otherwise it’d be analogous to a 4 node, which are disallowed in 2-3 trees].
+> - Every path from root to null has same number of **black links** [because 2-3 trees have the same number of links to every leaf]. LLRBs are therefore balanced.
 
+### 6- Red-Black Trees
+
+> - When inserting: Use a red link.
+> - If there is a *right leaning “3-node”*, we have a **Left Leaning Violation.**
+>   - Rotate left the appropriate node to fix.
+> - If there are *two consecutive left links*, we have an **Incorrect 4 Node Violation.**
+>   - Rotate right the appropriate node to fix.
+> - If there are any *nodes with two red children*, we have a **Temporary 4 Node.**
+>   - Color flip the node to emulate the split operation.
+>
+> ! : Cascading Balance = sometimes, even 2-3 representation is correct, you still need **a rotation** to ensure LL instead of RL
+>
+> **problem** : with insertion, these kind of trees will still augment heights => slow 
+
+## 10 Hashing
+
+> We saw different implementations to make a set / map, but the problem is :
+>
+> 1. trees are so hard to implement
+> 2. Search tree based sets are difficult to compare some objects
+
+### 1- deriving Hash Table
+
+Suppose we want to create a set with : add() & contains()
+
+how can we implement it so these 2 functions' runtimes are minimal ?
+
+**<u>Idea 1 : WriteOnTheWall Set</u>**
+
+> having a big wall, just write down an element, or search the item on the wall
+>
+> - fast for add, but slow for search
+>
+> Problems :
+>
+> - really hard to search
+
+![](.\images\wallSet.png)
+
+**<u>Idea 2 : Boba Set</u>**
+
+> split the wall by 10 sub-wall, representing 0-9.
+>
+> - write down the element in the corresponding wall based on the last digit
+> - search in the corresponding wall
+>
+> Problem :
+>
+> - waste of space
+> - what if elements are all concentrated in one sub-wall ?
+
+![](.\images\bobaSet.png)
+
+**<u>Idea 3 : DynamicArrayOfLists Set</u>**
+
+> keep previous idea, but use a linked list to save space ( with resize() )
+
+![](.\images\dynamicSet.png)
+
+### Idea 4 : extension
+
+> with a function to convert symbol into integer, we may extend the previous idea on all object. (with ASCII for example)
+>
+> problem : integer overflow [Java does not support a such big number]
+
+![](.\images\dynamicSet2.png)
+
+### Idea 5 : HashCode
+
+> principle of hashcode() : 你好 = ( ascii(你) * 31^1 ) + ( ascii(好) * 31^0 ) 
+>
+> - with available range : -2,147,483,648 -  2,147,483,647 
+>
+> warning 1 : Never store objects that can change in a HashSet or HashMap!  [variables changes -> hashCode change -> data lost]
+>
+> warning 2 : Never override `equals` without also overriding `hashCode` [it is used by `HashMap` / `HashSet` to determine the existence of data]
+
+![](.\images\dynamicSet3.png)
