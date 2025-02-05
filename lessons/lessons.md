@@ -903,7 +903,7 @@ Suppose we want to create a set with : add() & contains()
 
 how can we implement it so these 2 functions' runtimes are minimal ?
 
-**<u>Idea 1 : WriteOnTheWall Set</u>**
+#### **<u>Idea 1 : WriteOnTheWall Set</u>**
 
 > having a big wall, just write down an element, or search the item on the wall
 >
@@ -915,7 +915,7 @@ how can we implement it so these 2 functions' runtimes are minimal ?
 
 ![](.\images\wallSet.png)
 
-**<u>Idea 2 : Boba Set</u>**
+#### **<u>Idea 2 : Boba Set</u>**
 
 > split the wall by 10 sub-wall, representing 0-9.
 >
@@ -929,13 +929,13 @@ how can we implement it so these 2 functions' runtimes are minimal ?
 
 ![](.\images\bobaSet.png)
 
-**<u>Idea 3 : DynamicArrayOfLists Set</u>**
+#### **<u>Idea 3 : DynamicArrayOfLists Set</u>**
 
 > keep previous idea, but use a linked list to save space ( with resize() )
 
 ![](.\images\dynamicSet.png)
 
-### Idea 4 : extension
+#### Idea 4 : extension
 
 > with a function to convert symbol into integer, we may extend the previous idea on all object. (with ASCII for example)
 >
@@ -943,7 +943,7 @@ how can we implement it so these 2 functions' runtimes are minimal ?
 
 ![](.\images\dynamicSet2.png)
 
-### Idea 5 : HashCode
+#### Idea 5 : HashCode
 
 > principle of hashcode() : 你好 = ( ascii(你) * 31^1 ) + ( ascii(好) * 31^0 ) 
 >
@@ -954,3 +954,172 @@ how can we implement it so these 2 functions' runtimes are minimal ?
 > warning 2 : Never override `equals` without also overriding `hashCode` [it is used by `HashMap` / `HashSet` to determine the existence of data]
 
 ![](.\images\dynamicSet3.png)
+
+## 11 Priority Queues & Heaps
+
+### 1- 	MinPQ
+
+> If we want to get M smallest element from N elements with its own val, how do we do ?
+> Idea 1 : use ArrayList (good, but need add + sort + select M element  = O(N) memory space)
+> Idea 2 : user MinPQ
+
+```java
+/** (Min) Priority Queue: Allowing tracking and removal of the
+  * smallest item in a priority queue. */
+public interface MinPQ<Item> {
+	/** Adds the item to the priority queue. */
+	public void add(Item x);
+	/** Returns the smallest item in the priority queue. */
+	public Item getSmallest();
+	/** Removes the smallest item from the priority queue. */
+	public Item removeSmallest();
+	/** Returns the size of the priority queue. */
+	public int size();
+}
+
+
+// example
+public List<Particle> highestEnergyParticles(Detector det, int M) {
+    	Comparator<Particle> cmptr = new EnergyComparator();
+    	MinPQ<Particle> highEnergyParticles = new HeapMinPQ<>(cmptr);
+    	for (Timer timer = new Timer(); timer.hours() < 24; ) {
+        	highEnergyParticles.add(det.getNextParticle());
+        if (highEnergyParticles.size() > M) 
+           { highEnergyParticles.removeSmallest(); }
+    }
+    ArrayList<String> returnList = new ArrayList<String>();
+    	while (highEnergyParticles.size() > 0) {
+            returnList.add(highEnergyParticles.removeSmallest());
+    	}
+    	return returnList;
+}
+```
+
+![](.\images\minPQ.png)
+
+### 2- Binary min-Heap
+
+> prob : can we find a better way ? Yes
+> def : Binary tree that is **complete** and obeys **min-heap property**.
+>
+> - Min-heap: Every node is less than or equal to both of its children
+> - Complete: Missing items only at the bottom level (if any), all nodes are as far left as possible.
+
+|          methods           |                         description                          |
+| :------------------------: | :----------------------------------------------------------: |
+|    get<br>(getSmallest)    |                             easy                             |
+|            add             | 1. add to the end of heap temporary <br>2. swim up the tree to the rightful place (in swaping) |
+| delete<br>(removeSmaalest) | 1. swap the last item in the heap into the root<br>2. remove the older root (smallest one)<br>swim down the tree to the rightful place (in swaping) |
+
+#### possible implementations
+
+- **Approach 1** : create mapping from node to children
+  ![](.\images\heap1.png)
+
+- **Approach 2** : Store keys and parentID in 2 arrays
+  ![](.\images\heap2.png)
+
+- **Approach 3** : Store only keys in an array
+
+  ```
+  parent(k) = (k-1) /2
+  ```
+
+  ![](.\images\heap3.png)
+
+- **Approach 3bis** : leave keys[0] empty
+
+  ```
+  leftChild(k) = k*2
+  rightChild(k) = k*2 + 1
+  parent(k) = k/2
+  ```
+
+## 12 Graph & Tranversals
+
+### 1- Tree transversals
+
+> = Tree iteration
+
+**Breadth First Traversal (BFT)** = by level order
+
+**Depth First Traversals (DFT)** = by depth
+
+- **Preorder** : visit a node, then traverse its children     <u>*[visit != traverse]*</u>
+
+  - <u>use</u> : printing directory listing
+
+  ```python
+  def preOrder(BSTNode x):	# Here : DBA C FE G
+      if x==null: return 
+      print(x.key)
+      preOrder(x.left)
+      preOrder(x.right)
+  ```
+
+  ![](.\images\DFT1.png)
+
+- **Inorder** : traverse left child, then right child
+
+  ```python
+  def inOrder(BSTNode x):  # Here : ABC D EFG
+      if (x == null) return
+      inOrder(x.left)
+      print(x.key)
+      inOrder(x.right)
+  ```
+
+  ![](.\images\DFT2.png)
+
+- **Postorder** : traverse left, traverse right, then visit
+
+  - <u>use</u> : gathering file sizes
+
+  ```python
+  postOrder(BSTNode x): # Here : ACB EGF D
+      if (x == null) return
+      postOrder(x.left)
+      postOrder(x.right)
+      print(x.key)
+  ```
+
+  ![](.\images\DFT3.png)
+
+### 2- graph
+
+> A set of nodes.
+> A set of zero or more edges, each of which connects two nodes.
+
+**simple graph** 
+
+> No edges that connect a vertex to itself, i.e. no “loops”.
+>
+> No two edges that connect the same vertices, i.e. no “parallel edges”.
+
+- ![](.\images\graph.png)
+
+**terms** :
+
+- **vertice** : aka node
+- **edge** : pair of vertices
+- **adjacent** : vertices with an edge
+- **labels / weights**
+- **path** : sequence of vertices connected by edge
+- **simple path** : path without any repetition vertice
+- **cycle** : path whose 1st vertice =  -1st vertice
+- 2 vertices are **connected** : if there is a path between (**connected graph** if all vertices are connected)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
