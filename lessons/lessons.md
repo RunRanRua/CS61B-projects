@@ -1109,17 +1109,137 @@ public List<Particle> highestEnergyParticles(Detector det, int M) {
 - **cycle** : path whose 1st vertice =  -1st vertice
 - 2 vertices are **connected** : if there is a path between (**connected graph** if all vertices are connected)
 
+### 3- DFS
+
+> supposing having a graph API
+>
+> ```java
+> public class Graph {
+>   public Graph(int V):               // Create empty graph with v vertices
+>   public void addEdge(int v, int w): // add an edge v-w
+>   Iterable<Integer> adj(int v):      // vertices adjacent to v
+>   int V():                           // num(vertices)
+>   int E():                           // num(edges)
+> ...
+> ```
+
+**feature**
+
+- Number of vertices must be **specified** in advance.
+- **No support weights** on nodes or edges.
+- No method for getting v.numEdge() (i.e. its degree)
+
+**Implementation Strategy**
+
+- `Class graph` : representing a graph
+- `Class path` : to resolve graph problem
+
+````java
+public class DepthFirstPaths {
+  private boolean[] marked; // if checked
+  private int[] edgeTo;		// index = v, val = edgeTo
+  private int s;			// starting v
+ 	
+  public DepthFirstPaths(Graph G, int s) {
+      ...					// init
+      dfs(G, s);  // fill edgeTo
+  }
+  private void dfs(Graph G, int v) {
+    marked[v] = true;			// checked
+    for (int w : G.adj(v)) {
+      if (!marked[w]) {
+        edgeTo[w] = v;
+        dfs(G, w);
+      }        	
+    } 
+  }
+  
+  // methods
+  // show the path
+  public Iterable<Integer> pathTo(int v) {
+    if (!hasPathTo(v)) return null;
+    List<Integer> path = new ArrayList<>();
+    for (int x = v; x != s; x = edgeTo[x]) {
+      path.add(x);
+    }
+    path.add(s);
+    Collections.reverse(path);
+    return path;
+  }
+	// check path's available from s
+  public boolean hasPathTo(int v) {
+    return marked[v];
+  }
+}
+
+````
+
+**Graph representation**
+
+- approach 1 : adjacency matrix
+
+  - prob : when indirected graph = repetition
+    ![](.\images\dfs1.png)
+
+- Approach 2 : Edge sets
+
+  ````python
+  {(0,1), (0,2), (1,2)}
+  ````
+
+- Approach 3 : Adjacency Lists (most popular)
+
+  - index = v, val = list( v.adj() )
+    ![](.\images\dfs2.png)
+
+### 4- BFS
+
+> supposing having a graph API
+
+**Implementation**
+
+````java
+public class BreadthFirstPaths {
+  private boolean[] marked;
+  private int[] edgeTo;
+  ...
+	
+  private void bfs(Graph G, int s) {
+  Queue<Integer> fringe = new Queue<Integer>();  // deque
+  fringe.enqueue(s);
+  marked[s] = true;
+    
+  while (!fringe.isEmpty()) {
+    int v = fringe.dequeue();
+    for (int w : G.adj(v)) {
+      if (!marked[w]) {
+        fringe.enqueue(w);
+        marked[w] = true;
+        edgeTo[w] = v;
+      }
+    }
+  }
+}
+````
+
+### 5 - Comparison
+
+![](.\images\dfs-bfs.png)
+
+- In case of Adjacency Matrix : Both = O(V^2)
+
+| type             | DFS                                    | BFS                           |
+| ---------------- | -------------------------------------- | ----------------------------- |
+| space efficiency | bad for spindly graph (stack)          | bad for "bushy" graph (queue) |
+| path             | shortest edges (最少路线 - 无视weight) | shortest path（最短路径）     |
+
+### 6 - Shortest path - Dijkstra's algo
 
 
 
 
 
-
-
-
-
-
-
+### 7 - Shortest Path - A*
 
 
 
