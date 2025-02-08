@@ -55,4 +55,47 @@ public class TimeSeriesTest {
         assertThat(totalPopulation.years()).isEmpty();
         assertThat(totalPopulation.data()).isEmpty();
     }
+
+    @Test
+    public void sumTest_empty(){
+        TimeSeries ts1 = new TimeSeries();
+        TimeSeries ts2 = new TimeSeries();
+        // case 2 empty
+        TimeSeries ts_empty = ts1.plus(ts2);
+        assertThat(ts_empty).isEmpty();
+    }
+    @Test
+    public void sumTest_emptyCase1(){
+        TimeSeries ts1 = new TimeSeries();
+        TimeSeries ts2 = new TimeSeries();
+        // case 1 empty(param = empty)
+        ts1.put(1456,2.2);
+        TimeSeries ts_empty_param = ts1.plus(ts2);
+        assertThat(ts_empty_param).isEqualTo(ts1);
+    }
+    @Test
+    public void sumTest_emptyCase2(){
+        TimeSeries ts1 = new TimeSeries();
+        TimeSeries ts2 = new TimeSeries();
+        // case 2 empty (variable = empty)
+        ts1.put(1456,2.2);
+        TimeSeries ts_empty_var = ts2.plus(ts1);
+        assertThat(ts_empty_var).isEqualTo(ts1);
+    }
+    @Test
+    public void divideTest(){
+        TimeSeries ts1 = new TimeSeries();
+        TimeSeries ts2 = new TimeSeries();
+        ts1.put(1450,2.2);
+        ts1.put(1451,2.2);
+        ts1.put(1452,2.2);
+
+        ts2.put(1450,1.1);
+        ts2.put(1451,1.1);
+        ts2.put(1452,1.);
+        ts2.put(1453,1.1);
+
+        TimeSeries dividedTS = ts1.dividedBy(ts2);
+    }
+
 } 

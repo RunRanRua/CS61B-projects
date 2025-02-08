@@ -16,6 +16,6 @@ Welcome to my repository for the CS61B: Data Structures course offered by UC Ber
 4. **Project 1c: [Deque enhancements]**
    - Description: based on the 2 previous deque, try to build a new better deque.
    - Topics Covered: iterator(), equals(), and toString()
-5. **Project 2a: []**
-   - Description: 
-   - Topics Covered: 
+5. **Project 2a: [NGrams]**
+   - Description: realise a "Google Ngram"-like viewer, visualising words'recurrence per year (with given dataset)
+   - Topics Covered: Map, TreeMap, visualisation (-)

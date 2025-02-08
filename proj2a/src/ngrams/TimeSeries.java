@@ -1,5 +1,7 @@
 package ngrams;
 
+import edu.princeton.cs.algs4.In;
+
 import java.util.List;
 import java.util.TreeMap;
 
@@ -31,6 +33,12 @@ public class TimeSeries extends TreeMap<Integer, Double> {
     public TimeSeries(TimeSeries ts, int startYear, int endYear) {
         super();
         // TODO: Fill in this constructor.
+        List<Integer> ys = ts.years();
+        for (Integer y : ys){
+            if (y >= startYear && y <= endYear){
+                put(y, ts.get(y));
+            }
+        }
     }
 
     /**
@@ -38,7 +46,7 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public List<Integer> years() {
         // TODO: Fill in this method.
-        return null;
+        return keySet().stream().toList();
     }
 
     /**
@@ -47,7 +55,7 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public List<Double> data() {
         // TODO: Fill in this method.
-        return null;
+        return values().stream().toList();
     }
 
     /**
@@ -61,7 +69,11 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public TimeSeries plus(TimeSeries ts) {
         // TODO: Fill in this method.
-        return null;
+        TimeSeries sumTS = new TimeSeries(ts, MIN_YEAR, MAX_YEAR);
+        for (Integer year : years()){
+            sumTS.put(year, sumTS.getOrDefault(year,0.) + get(year));
+        }
+        return sumTS;
     }
 
     /**
@@ -75,7 +87,15 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public TimeSeries dividedBy(TimeSeries ts) {
         // TODO: Fill in this method.
-        return null;
+        TimeSeries dividedTS = new TimeSeries();
+        for (Integer year : years()){
+            if (!ts.containsKey(year)){
+                throw new IllegalArgumentException();
+            }
+
+            dividedTS.put(year, get(year) / ts.get(year));
+        }
+        return dividedTS;
     }
 
     // TODO: Add any private helper methods.

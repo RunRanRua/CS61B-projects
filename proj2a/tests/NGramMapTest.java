@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.In;
+import main.HistoryTextHandler;
 import ngrams.NGramMap;
 import ngrams.TimeSeries;
 
@@ -73,4 +75,11 @@ public class NGramMapTest {
         assertThat(fishPlusDogWeight.get(1865)).isWithin(1E-10).of(expectedFishPlusDogWeight1865);
     }
 
+
+    @Test
+    public void constructTest(){
+        NGramMap ngm = new NGramMap(SHORT_WORDS_FILE, TOTAL_COUNTS_FILE);
+
+        System.out.println("test");
+    }
 }  

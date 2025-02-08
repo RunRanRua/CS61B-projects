@@ -2,9 +2,10 @@ package utils;
 
 /** A collection of file paths to data files. Make sure your data folder is on the same
  *  level as "src".
+ *  url for data : https://drive.google.com/file/d/1cfBkoUOUmCgLBRS3q4g56kTfXr_9t83G/view
  */
 public class Utils {
-    private static final String PREFIX = "./data/ngrams/";
+    private static final String PREFIX = "utils/data/ngrams/";
 
     public static final String TOP_14337_WORDS_FILE = PREFIX + "top_14377_words.csv";
 
@@ -13,7 +14,7 @@ public class Utils {
     public static final String Q_WORDS_FILE = PREFIX + "words_that_start_with_q.csv";
 
     public static final String SHORT_WORDS_FILE = PREFIX + "very_short.csv";
-    public static final String TOTAL_COUNTS_FILE = PREFIX + "total_counts.csv";
 
+    public static final String TOTAL_COUNTS_FILE = PREFIX + "total_counts.csv";
 }
 

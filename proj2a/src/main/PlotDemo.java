@@ -15,7 +15,6 @@ public class PlotDemo {
         ArrayList<String> words = new ArrayList<>();
         words.add("cat");
         words.add("dog");
-
         ArrayList<TimeSeries> lts = new ArrayList<>();
         for (String word : words) {
             lts.add(ngm.weightHistory(word, 1900, 1950));
