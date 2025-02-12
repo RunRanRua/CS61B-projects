@@ -1235,11 +1235,42 @@ public class BreadthFirstPaths {
 
 ### 6 - Shortest path - Dijkstra's algo
 
+**idea** : 
 
+- Insert all vertices into fringe PQ, storing vertices in order of distance from source.Repeat: Remove (closest) vertex v from PQ, and relax all edges pointing from v.
 
-
+![](.\images\dijkstra.png)
 
 ### 7 - Shortest Path - A*
 
+**idea** :
 
+- Insert all vertices into fringe PQ, storing vertices in order of d(source, v) + h(v, goal).Repeat: Remove best vertex v from PQ, and relax all edges pointing from v.
 
+![](.\images\A-star.png)
+
+## 13 Minimum Spanning Tree
+
+### 1 - Property
+
+```
+MST = a spanning tree of minimum total weight
+
+Given an undirected graph, a spanning tree T is a subgraph of G, where T:
+- Is connected.
+- Is acyclic.
+- Includes all of the vertices.
+```
+
+### 2 - Cut property
+
+```
+def : Given any cut, minimum weight crossing edge is in the MST.
+
+- cut : an assignment of a graph’s nodes to two non-empty sets.
+- crossing edge : an edge which connects a node from one set to a node from the other set
+```
+
+### 3 - Prim' Algorithm
+
+### 4 - Kruskal's Algorithm
