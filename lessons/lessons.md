@@ -595,7 +595,11 @@ public class Dog implements Comparable<Dog> {
 }
 ```
 
-## 07 ArraySet + Iterator + toString
+---
+
+# Set
+
+## 01 ArraySet + Iterator + toString
 
 > Construct an arrayset with iterator (iterator class + hasNext() + next() + implements)
 
@@ -702,7 +706,7 @@ public class ArraySet<T> implements Iterable<T> {
 
 ```
 
-## 08 Disjoint Sets
+## 02 Disjoint Sets
 
 > intuitive version : ArrayList< Set<Integer> >    = bad for search + hard to implement
 
@@ -802,7 +806,11 @@ When we connect A and B, we replace each traveled node's parent by the root
 
 ![](.\images\ComplexityDS.png)
 
-## 09 Binary Trees
+---
+
+# Tree
+
+## 01 Binary Trees
 
 > an unordered linked list set : perform insert/remove
 >
@@ -890,7 +898,7 @@ B-->E(4)
 >
 > **problem** : with insertion, these kind of trees will still augment heights => slow 
 
-## 10 Hashing
+## 02 Hashing
 
 > We saw different implementations to make a set / map, but the problem is :
 >
@@ -955,7 +963,7 @@ how can we implement it so these 2 functions' runtimes are minimal ?
 
 ![](.\images\dynamicSet3.png)
 
-## 11 Priority Queues & Heaps
+## 03 Priority Queues & Heaps
 
 ### 1- 	MinPQ
 
@@ -1035,7 +1043,7 @@ public List<Particle> highestEnergyParticles(Detector det, int M) {
   parent(k) = k/2
   ```
 
-## 12 Graph & Tranversals
+## 04 Graph & Tranversals
 
 ### 1- Tree transversals
 
@@ -1249,7 +1257,7 @@ public class BreadthFirstPaths {
 
 ![](.\images\A-star.png)
 
-## 13 Minimum Spanning Tree
+## 05 Minimum Spanning Tree
 
 ### 1 - Property
 
@@ -1273,4 +1281,173 @@ def : Given any cut, minimum weight crossing edge is in the MST.
 
 ### 3 - Prim' Algorithm
 
+**Initial version**
+
+```
+Start from some arbitrary start node.
+
+- Repeatedly add shortest edge that has 1 node inside the MST under construction
+- Repeat until V-1 edges
+```
+
+**Improved version**
+
+```
+Insert all vertices into fringe PQ, storing vertices in order of distance from tree.
+Repeat: Remove (closest) vertex v from PQ, and relax all edges pointing from v.
+```
+
+```java
+public class PrimMST {
+    public PrimMST(EdgeWeightedGraph G) {
+        edgeTo = new Edge[G.V()];
+        distTo = new double[G.V()];
+        marked = new boolean[G.V()];
+        fringe = new SpecialPQ<Double>(G.V());
+
+        distTo[s] = 0.0;
+        setDistancesToInfinityExceptS(s);
+        insertAllVertices(fringe);
+
+        /* Get vertices in order of distance from tree. */
+        while (!fringe.isEmpty()) {
+            int v = fringe.delMin();
+            scan(G, v);
+        } 
+    }
+
+
+    private void scan(EdgeWeightedGraph G, int v) {
+        marked[v] = true;
+        for (Edge e : G.adj(v)) {
+            int w = e.other(v);
+            if (marked[w]) { continue; } 
+            if (e.weight() < distTo[w]) {
+                distTo[w] = e.weight();
+                edgeTo[w] = e;
+                pq.decreasePriority(w, distTo[w]);
+            }
+        }
+    }
+```
+
 ### 4 - Kruskal's Algorithm
+
+**Initial version**
+
+```
+Initially mark all edges gray.
+- Consider edges in increasing order of weight.
+- Add edge to MST (mark black) unless doing so creates a cycle.
+- Repeat until V-1 edges.
+```
+
+**Improved version**
+
+```
+Insert all edges into PQ. 
+Repeat: Remove smallest weight edge. Add to MST if no cycle created.
+```
+
+```java
+public class KruskalMST {
+    private List<Edge> mst = new ArrayList<Edge>();
+
+    public KruskalMST(EdgeWeightedGraph G) {
+        MinPQ<Edge> pq = new MinPQ<Edge>();
+        for (Edge e : G.edges()) {
+            pq.insert(e);
+        }
+        WeightedQuickUnionPC uf = 
+            new WeightedQuickUnionPC(G.V());
+        while (!pq.isEmpty() && mst.size() < G.V() - 1) {
+            Edge e = pq.delMin();
+            int v = e.from();
+            int w = e.to();
+            if (!uf.connected(v, w)) {
+                uf.union(v, w);
+                mst.add(e); 
+            }
+        }
+    }
+}
+```
+
+## 06 Trie
+
+### **1- Concept**
+
+Suppose we know that our keys are always strings, we may use trie.
+
+Tries will have great performance on:
+
+- get
+- add
+- special string operations
+
+![](.\images\trie.png)
+
+### 2- Basic implementation
+
+```java
+public class TrieSet {
+    private static final int R = 128; // ASCII
+    private Node root;	// root of trie
+
+    private static class Node {
+        private char ch;  
+        private boolean isKey;   
+        private DataIndexedCharMap<Node> next;
+        private Node(char c, boolean b, int R) {
+            ch = c; isKey = b;
+            next = new DataIndexedCharMap<>(R);
+        }
+    }
+}
+```
+
+### 3- better version
+
+```java
+// the problem with DataIndexedCharMap is : its len =128 and there are always repeated letter (map & char)
+// so the idea is remove char to avoid redundancy
+
+public class TrieSet {
+    private static final int R = 128; // ASCII
+    private Node root;	// root of trie
+
+    private static class Node {
+        // private char ch;  
+        private boolean isKey;   
+        private DataIndexedCharMap<Node> next;
+        private Node(boolean b, int R) {  // Node(char c, boolean b, int R) {
+            // ch = c; 
+            isKey = b;
+            next = new DataIndexedCharMap<>(R);
+        }
+    }
+}
+```
+
+### 4- Alternate Child Tracking Strategies
+
+![](.\images\trie2.png)
+
+## 07 Directed Acyclic Graphs
+
+### 1- Topological sort
+
+![](.\images\dag.png)
+
+### 2- Reduction
+
+“If any subroutine for task Q can be used to solve P, we say P reduces to Q.”
+
+- DAG-LPT reduces to DAG-SPT
+
+
+
+
+
+
+
