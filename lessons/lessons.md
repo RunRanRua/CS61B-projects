@@ -1445,9 +1445,95 @@ public class TrieSet {
 
 - DAG-LPT reduces to DAG-SPT
 
+# Sort
 
+## 01 Selection Sort
 
+> - Find the smallest item in the unsorted portion of the array.
+> - Move it to the end of the sorted portion of the array.
+> - Selection sort the remaining unsorted items.
 
+````java
+for (int i= 0; i< L.length; i++){
+  for (int j= i+1; j< L.length-1; j++){
+    if (L[j] < L[i]){
+      swap(L, i, j)
+    }
+  }
+}
+````
 
+## 02 Heap sort
 
+### 1- Naive version
 
+> - Insert all items into a max heap, and discard input array.
+> - Create output array.
+> - Repeat N times: 
+>   - Delete largest item from the max heap.
+>   - Put largest item at the end of the unused part of the output array.
+
+### 2 - Imrpved version : memory
+
+> - Store the heap and the output in the same array, so we save memory
+>   - Convert input into heap (ideally in-place so no memory is used)
+>   - Repeat N times:
+>     - Delete largest item from the max heap, and move deleted item to vacated array slot. 
+
+## 03 Merge Sort
+
+> - Split items into 2 roughly even pieces.
+> - Mergesort each half (a recursive algorithm)
+> - Merge the two sorted halves to form the final result.
+
+![](.\images\mergeS.png)
+
+## 04 Insertion Sort
+
+> Idea : with a new empty list, we try to add each element and find its place  (can be improved = in-place sort)
+>
+> - Designate item i as the traveling item.
+> - Swap item backwards until traveller is in the right place among all previously examined items.
+
+## 05 Quick Sort
+
+> Idea : split the lst into 2 parts (with a pivot X where [L] <-= X & [R] >= X)
+>
+> - Partition on leftmost item.
+> - Quicksort left half.
+> - Quicksort right half.
+
+### 1- Hoare Partitioning
+
+> - For L-pointer : swap with R if < X
+> - For R-point : swap with X if > X
+
+![](.\images\quickS.png)
+
+### 2- Comparison
+
+![](.\images\Scompare.png)
+
+## 06 Counting Sort
+
+> Non-comparative sorting algorithm:
+>
+> - use the extra space to count the number of occurrences of the statistics, and then according to the results of the statistics to fill the data back into the original array, so as to complete the sorting.
+
+### Basic Idea of Counting Sort
+
+1. **Count the number of times each element occurs**
+   	First traverse the array and record the number of occurrences of each element.
+2. **Calculate the cumulative count**
+   Calculate where each element should be after sorting.
+3. **Backfill the original array**
+   Based on the cumulative count, traverse the original array from back to front and place the element in the correct position.
+
+## 07 Radix Sort
+
+> Non-comparative sorting algorithm:
+>
+> - LSD (Least Significant Digit) Radix Sort : 基于低位
+> - MSD (Most Significant Digit) Radix Sort : 基于高位
+
+![](.\images\Scompare2.png)
