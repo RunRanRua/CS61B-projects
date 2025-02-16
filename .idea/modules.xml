@@ -4,15 +4,18 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/CS61B-projects.iml" filepath="$PROJECT_DIR$/.idea/CS61B-projects.iml" />
       <module fileurl="file://$PROJECT_DIR$/exercises/exercises.iml" filepath="$PROJECT_DIR$/exercises/exercises.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lab10_tetris/lab10_tetris.iml" filepath="$PROJECT_DIR$/lab10_tetris/lab10_tetris.iml" />
       <module fileurl="file://$PROJECT_DIR$/lab5_DisjointSet/lab5_DisjointSet.iml" filepath="$PROJECT_DIR$/lab5_DisjointSet/lab5_DisjointSet.iml" />
       <module fileurl="file://$PROJECT_DIR$/lab6_BSTmap/lab6_BSTmap.iml" filepath="$PROJECT_DIR$/lab6_BSTmap/lab6_BSTmap.iml" />
       <module fileurl="file://$PROJECT_DIR$/lab7_LLRB/lab7_LLRB.iml" filepath="$PROJECT_DIR$/lab7_LLRB/lab7_LLRB.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lab8_hashmap/lab8_hashmap.iml" filepath="$PROJECT_DIR$/lab8_hashmap/lab8_hashmap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lab9_GoL/lab9_GoL.iml" filepath="$PROJECT_DIR$/lab9_GoL/lab9_GoL.iml" />
       <module fileurl="file://$PROJECT_DIR$/proj0/proj0.iml" filepath="$PROJECT_DIR$/proj0/proj0.iml" />
       <module fileurl="file://$PROJECT_DIR$/proj1a/proj1a.iml" filepath="$PROJECT_DIR$/proj1a/proj1a.iml" />
       <module fileurl="file://$PROJECT_DIR$/proj1b/proj1b.iml" filepath="$PROJECT_DIR$/proj1b/proj1b.iml" />
       <module fileurl="file://$PROJECT_DIR$/proj1c/proj1c.iml" filepath="$PROJECT_DIR$/proj1c/proj1c.iml" />
       <module fileurl="file://$PROJECT_DIR$/proj2a/proj2a.iml" filepath="$PROJECT_DIR$/proj2a/proj2a.iml" />
-      <module fileurl="file://$PROJECT_DIR$/proj2b/proj2b.iml" filepath="$PROJECT_DIR$/proj2b/proj2b.iml" />
+      <module fileurl="file://$PROJECT_DIR$/proj3/proj3.iml" filepath="$PROJECT_DIR$/proj3/proj3.iml" />
     </modules>
   </component>
 </project>
