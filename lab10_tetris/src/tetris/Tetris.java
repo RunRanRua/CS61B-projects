@@ -1,10 +1,13 @@
 package tetris;
 
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.StdOut;
 import tileengine.TETile;
 import tileengine.TERenderer;
 import tileengine.Tileset;
 
+import java.awt.*;
 import java.util.*;
 
 /**
@@ -93,6 +96,15 @@ public class Tetris {
         // TODO: Implement interactivity, so the user is able to input the keystrokes to move
         //  the tile and rotate the tile. You'll want to use some provided helper methods here.
 
+        while (StdDraw.hasNextKeyTyped() ) {
+            switch (StdDraw.nextKeyTyped()) {
+                case 'a' -> movement.tryMove(-1, 0);
+                case 'd' -> movement.tryMove(1, 0);
+                case 's' -> movement.dropDown();
+                case 'q' -> movement.rotateLeft();
+                case 'w' -> movement.rotateRight();
+            }
+        }
 
         Tetromino.draw(t, board, t.pos.x, t.pos.y);
     }
@@ -104,9 +116,41 @@ public class Tetris {
      */
     private void incrementScore(int linesCleared) {
         // TODO: Increment the score based on the number of lines cleared.
-
+        score += switch (linesCleared){
+            case 1->100;
+            case 2->300;
+            case 3->500;
+            case 4->800;
+            default -> 0;
+        };
     }
 
+
+    private boolean isRowCompleted(TETile[][] tiles, int row){
+        for(int col=0; col <tiles.length; col++){
+            if (Tileset.NOTHING.equals(tiles[col][row])){
+                return false;
+            }
+        }
+        return true;
+    }
+    private void clearLine(TETile[][] tiles, int r){
+        for(int col=0; col <tiles.length; col++){       // each column
+            tiles[col][r] = Tileset.NOTHING;
+        }
+    }
+    private void shiftDownLines(TETile[][] tiles, int r){
+
+        for(int i=0; i<tiles.length; i++){
+            for(int j=r; j<tiles[0].length-1; j++){
+                tiles[i][j] = tiles[i][j+1];
+            }
+        }
+
+        for(int i=0; i<tiles.length; i++){
+            tiles[i][tiles[0].length-1] = Tileset.NOTHING;
+        }
+    }
     /**
      * Clears lines/rows on the provided tiles/board that are horizontally filled.
      * Repeats this process for cascading effects and updates score accordingly.
@@ -115,11 +159,25 @@ public class Tetris {
     public void clearLines(TETile[][] tiles) {
         // Keeps track of the current number lines cleared
         int linesCleared = 0;
+        ArrayList<Integer> rowToShift = new ArrayList<>();
+        int cnt =0;
 
         // TODO: Check how many lines have been completed and clear it the rows if completed.
+        for(int r=0; r<tiles[0].length;r++){        // each row
+            if(!isRowCompleted(tiles,r)){
+                continue;
+            }
+            clearLine(tiles, r);
+            rowToShift.add(r);
+            linesCleared++;
+        }
+        for (int r : rowToShift){
+            shiftDownLines(tiles,r-cnt);
+            cnt++;
+        }
 
         // TODO: Increment the score based on the number of lines cleared.
-
+        incrementScore(linesCleared);
         fillAux();
     }
 
@@ -129,10 +187,19 @@ public class Tetris {
      */
     public void runGame() {
         resetActionTimer();
-
         // TODO: Set up your game loop. The game should keep running until the game is over.
         // Use helper methods inside your game loop, according to the spec description.
-
+        while (!isGameOver){
+            spawnPiece();
+            while(currentTetromino != null){
+                updateBoard();
+                renderBoard();
+            }
+            clearLines(board);
+            spawnPiece();
+            renderScore();
+        }
+        System.out.println("Game Over");
 
     }
 
@@ -141,7 +208,15 @@ public class Tetris {
      */
     private void renderScore() {
         // TODO: Use the StdDraw library to draw out the score.
+        // StdDraw.clear();
 
+        // Text color
+        StdDraw.setPenColor(255, 255, 255);
+
+        // position
+        StdDraw.text(7, 19, "Score: "+ score);
+        // draw
+        StdDraw.show();
     }
 
     /**
