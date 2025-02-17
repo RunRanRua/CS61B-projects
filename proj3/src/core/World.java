@@ -1,10 +1,12 @@
 package core;
 
+import edu.princeton.cs.algs4.StdDraw;
 import tileengine.TERenderer;
 import tileengine.TETile;
 import tileengine.Tileset;
 import utils.FileUtils;
 
+import java.awt.*;
 import java.io.FileNotFoundException;
 import java.util.*;
 
@@ -15,7 +17,7 @@ public class World {
     private static int WIDTH;
     private static int HEIGHT;
     private static Random RANDOM;
-    final TETile[][] currentWorld;
+    TETile[][] currentWorld;
     private static final String SAVE_FILE = "proj3/src/save.txt";
 
     // ROOM PART
@@ -23,6 +25,7 @@ public class World {
     private static final int MIN_ROOM_SIZE = 10;
     private static final int MAX_ROOM_SIZE = 18;
     private final ArrayList<Room> rooms = new ArrayList<>();
+    private Avatar avatar;
 
 
 
@@ -41,10 +44,65 @@ public class World {
         generateRooms();
         // generate hallways
         connectRooms();
+        // generate avatar
+        createAvatar();
+    }
+
+    private boolean checkQuit(){
+        while (true) {
+            if (StdDraw.hasNextKeyTyped()){
+                switch (StdDraw.nextKeyTyped()) {
+                    case 'Q','q' -> {
+                        return true;
+                    }
+                    default -> {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    private boolean updateWorld() throws FileNotFoundException {
+        currentWorld[avatar.getX()][avatar.getY()] = Tileset.FLOOR;
+        boolean isExist = false;
+        while (StdDraw.hasNextKeyTyped() ) {
+            switch (StdDraw.nextKeyTyped()){
+                case 'W','w'->{
+                    avatar.tryMoveW(currentWorld);
+                    isExist = false;
+                } case 'S','s'->{
+                    avatar.tryMoveS(currentWorld);
+                    isExist = false;
+                } case 'A','a'->{
+                    avatar.tryMoveA(currentWorld);
+                    isExist = false;
+                } case 'D','d'->{
+                    avatar.tryMoveD(currentWorld);
+                    isExist = false;
+                }case 'L','l'->{
+                    currentWorld = loadBoard(SAVE_FILE);
+                    isExist = false;
+                }case ':'->isExist = checkQuit();
+            }
+        }
+        // generate new position
+        currentWorld[avatar.getX()][avatar.getY()] = Tileset.AVATAR;
+        return isExist;
     }
 
 
+    public void createAvatar(){
+        while (true){
+            int x = RANDOM.nextInt(WIDTH);
+            int y = RANDOM.nextInt(HEIGHT);
 
+            if ( Tileset.FLOOR.equals(currentWorld[x][y])){
+                avatar = new Avatar(x,y);
+                currentWorld[x][y] = Tileset.AVATAR;
+                break;
+            }
+        }
+    }
 
     private void fillWorldWithNothing() {
         for (int x = 0; x < WIDTH; x++) {
@@ -127,7 +185,9 @@ public class World {
                     content.append(1);
                 }else if(Tileset.WALL.equals(currentWorld[x][y])){
                     content.append(2);
-                }else{
+                } else if (Tileset.AVATAR.equals(currentWorld[x][y])) {
+                    content.append(3);
+                } else{
                     content.append(0);
                 }
             }
@@ -150,9 +210,13 @@ public class World {
 
         for (int r = 1; r< lines.length; r++){
             for (int j=0; j<lines[r].length(); j++){
+                if (lines[r].charAt(j)== '3'){
+                    avatar = new Avatar(j,h-r);
+                }
                 switch (lines[r].charAt(j)){
                     case '1'-> loadTiles[j][h-r] = Tileset.FLOOR;
                     case '2'-> loadTiles[j][h-r] = Tileset.WALL;
+                    case '3' -> loadTiles[j][h-r] = Tileset.AVATAR;
                     default -> loadTiles[j][h-r] = Tileset.NOTHING;
                 }
             }
@@ -161,6 +225,18 @@ public class World {
         return loadTiles;
     }
 
+
+    public void runWorld(TERenderer ter) throws FileNotFoundException {
+        ter.resetFont();
+        boolean isExit = false;
+        while (!isExit){
+            ter.renderFrame(currentWorld);
+            isExit = updateWorld();
+        }
+        saveBoard();
+        System.exit(0);
+
+    }
     public static void main(String[] args) {
         TERenderer ter = new TERenderer();
         ter.initialize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
